@@ -1,24 +1,30 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <t:template title="Calculadora de IMC">
 	<jsp:body>
-		<h1>Digite seus dados para o cálculo do IMC</h1>
-		<form action="imc-calculator" method="POST">
+		<h1>Autenticação</h1>
+		
+		<c:if test="${param.error != null}">
+			O seu nome de usuário ou senha está errado.
+		</c:if>
+		
+		<form action="login" method="POST">
 			<div class="row">
 				<div class="input-field col s12">
-					<input id="weight" type="text" name="weight" />
-					<label for="weight" class="active">Peso</label>
+					<input id="username" type="text" name="username" />
+					<label for="username" class="active">Nome do Usuário</label>
 				</div>
 			</div>
 			<div class="row">
 				<div class="input-field col s12">
-					<input id="height" type="text" name="height" />
-					<label for="height" class="active">Altura</label>
+					<input id="password" type="password" name="password" />
+					<label for="password" class="active">Senha</label>
 				</div>
 			</div>
 			<p>
-				<button type="submit" class="waves-effect waves-light btn green darken-3">Calcular</button>
+				<button type="submit" class="waves-effect waves-light btn green darken-3">Enviar</button>
 			</p>
 		</form>		
 	</jsp:body>
