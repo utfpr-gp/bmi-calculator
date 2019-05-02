@@ -45,7 +45,7 @@
 						</a> <a href="#" data-activates="mobile-demo" class="button-collapse"><i
 							class="material-icons">menu</i></a>
 						<ul class="right hide-on-med-and-down">
-							<li><a href="index.jsp">Início</a></li>							
+							<li><a href="index.jsp">Início</a></li>
 							<c:if test="${isLoggedIn}">
 							<li><a href="logout">Logout</a></li>
 							</c:if>							
