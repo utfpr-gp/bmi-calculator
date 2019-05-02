@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>           
     <Realm  className="org.apache.catalina.realm.JDBCRealm"
-    	driverName="com.mysql.cj.jdbc.Driver"
+    	driverName="com.mysql.jdbc.Driver"
         connectionURL="jdbc:mysql://localhost:3306/bmi_calculator_db?serverTimezone=UTC"
         connectionName="root" 
         connectionPassword="qwerty"        

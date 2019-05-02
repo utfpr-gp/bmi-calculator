@@ -1,13 +1,14 @@
-DROP DATABASE IF EXISTS tomcat;
-CREATE DATABASE tomcat;
-USE tomcat;
+DROP DATABASE IF EXISTS bmi_calculator_db;
+CREATE DATABASE bmi_calculator_db;
+USE bmi_calculator_db;
+
 CREATE TABLE users (
 	login varchar(20) NOT NULL PRIMARY KEY,
 	pwd varchar(64) NOT NULL
 );
 CREATE TABLE roles (
 	login varchar(20) NOT NULL,
-    role varchar(20) NOT NULL,	
+  role varchar(20) NOT NULL,
 	primary key(login, role)
 );
 
