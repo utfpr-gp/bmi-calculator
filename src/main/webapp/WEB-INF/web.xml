@@ -32,8 +32,8 @@
   <login-config>
     <auth-method>FORM</auth-method>
     <form-login-config>
-      <form-login-page>/WEB-INF/login-form.jsp</form-login-page>
-      <form-error-page>/WEB-INF/login-form.jsp</form-error-page>
+      <form-login-page>/WEB-INF/view/login-form.jsp</form-login-page>
+      <form-error-page>/WEB-INF/view/login-form.jsp</form-error-page>
     </form-login-config>
   </login-config>
   <error-page>

@@ -6,5 +6,7 @@
 <t:template title="Usuário">
 	<jsp:body>
 		<h1>Tela do Usuário</h1>
+
+		<a href="u/usuarios/editar?id=${username}">Editar Perfil</a>
 	</jsp:body>
 </t:template>

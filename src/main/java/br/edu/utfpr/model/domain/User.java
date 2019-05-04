@@ -57,11 +57,11 @@ public class User {
     @PreUpdate
     public void onSave() {
 
-        if (this.password == null) {
-            return;
-        }
-
-        final String hashed = Sha256Generator.generate(this.password);
-        this.setPassword(hashed);
+//        if (this.password == null) {
+//            return;
+//        }
+//
+//        final String hashed = Sha256Generator.generate(this.password);
+//        this.setPassword(hashed);
     }
 }
