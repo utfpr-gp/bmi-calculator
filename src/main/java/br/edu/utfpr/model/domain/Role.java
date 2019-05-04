@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Role {
 
     @Id
-    @Column(name = "login", length = 20)
+    @Column(name = "login", length = 200)
     private String name;
 
     private String role;

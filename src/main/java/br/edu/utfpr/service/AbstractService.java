@@ -26,48 +26,19 @@ public class AbstractService<PK, T> {
 
     public T getById(PK pk) {
         T entity = null;
-
-        try {
-            JPAUtil.beginTransaction();
-            entity = dao.getById(pk);
-            JPAUtil.commit();
-        } catch (Exception e) {
-            JPAUtil.rollBack();
-        } finally {
-            JPAUtil.closeEntityManager();
-        }
-
+        entity = dao.getById(pk);
         return entity;
     }
 
     public T getByProperty(String propertyName, String propertyValue) {
         T entity = null;
-        try {
-            JPAUtil.beginTransaction();
-            entity = dao.getByProperty(propertyName, propertyValue);
-            JPAUtil.commit();
-        } catch (Exception e) {
-            JPAUtil.rollBack();
-            e.printStackTrace();
-        } finally {
-            JPAUtil.closeEntityManager();
-        }
-
+        entity = dao.getByProperty(propertyName, propertyValue);
         return entity;
     }
 
     public List<T> findAll() {
         List<T> entities = null;
-        try {
-            JPAUtil.beginTransaction();
-            entities = dao.findAll();
-            JPAUtil.commit();
-        } catch (Exception e) {
-            JPAUtil.rollBack();
-            e.printStackTrace();
-        } finally {
-            JPAUtil.closeEntityManager();
-        }
+        entities = dao.findAll();
         return entities;
     }
 

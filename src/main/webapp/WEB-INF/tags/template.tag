@@ -40,13 +40,13 @@
 			<nav>
 				<div class="nav-wrapper blue">
 					<div class="container">
-						<a class="brand-logo" href="index.jsp"> <img class="utf-logo"
+						<a class="brand-logo" href=""> <img class="utf-logo"
 							src="resources/img/logo.png"></img>
 						</a> <a href="#" data-activates="mobile-demo" class="button-collapse"><i
 							class="material-icons">menu</i></a>
 						<ul class="right hide-on-med-and-down">
-							<li><a href="index.jsp">Início</a></li>
-							<c:if test="${isLoggedIn}">
+							<li><a href="">Início</a></li>
+							<c:if test="${not empty username}">
 							<li><a href="logout">Logout</a></li>
 							</c:if>							
 							
@@ -61,8 +61,8 @@
 								</div>
 							</div>
 
-							<li><a href="index.jsp">Início</a></li>							
-							<c:if test="${isLoggedIn}">
+							<li><a href="">Início</a></li>
+							<c:if test="${not empty username}">
 							<li><a href="logout">Logout</a></li>
 							</c:if>
 						</ul>
