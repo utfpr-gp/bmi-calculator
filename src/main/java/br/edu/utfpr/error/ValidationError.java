@@ -1,4 +1,4 @@
-package br.edu.utfpr.util;
+package br.edu.utfpr.error;
 
 public class ValidationError {
 	private String field;
@@ -6,6 +6,11 @@ public class ValidationError {
 
 	public ValidationError() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public ValidationError(String message) {
+		super();
+		this.message = message;
 	}
 
 	public ValidationError(String field, String message) {

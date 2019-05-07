@@ -15,7 +15,7 @@
 			<div class="row">
 				<div class="input-field col s12">
 					<input id="username" type="text" name="username" />
-					<label for="username" class="active">Nome do Usuário</label>
+					<label for="username" class="active">Email</label>
 				</div>
 			</div>
 			<div class="row">

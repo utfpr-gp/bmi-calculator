@@ -2,7 +2,6 @@ package br.edu.utfpr.controller;
 
 import java.io.IOException;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import br.edu.utfpr.service.UserService;
 import br.edu.utfpr.util.Constants;
 import br.edu.utfpr.util.Routes;
 import br.edu.utfpr.util.Sha256Generator;
-import br.edu.utfpr.util.ValidationError;
+import br.edu.utfpr.error.ValidationError;
 
 /**
  * Servlet implementation class LoginController
@@ -69,17 +68,18 @@ public class UserController extends HttpServlet {
 
         if(request.getServletPath().contains(Routes.CREATE)){
             //persiste o usuário
-            hasError = persist(request, response, userDTO);
+            boolean isSuccess = persist(request, response, userDTO);
 
-            if(hasError){
+            if(!isSuccess){
                 //reapresenta o formulário com a mensagem de erro
                 String address = "/WEB-INF/view/user/register-user-form.jsp";
 
                 errors = new ArrayList<>();
                 errors.add(new ValidationError("", "Erro ao persistir os dados."));
 
-                request.setAttribute("errors", errors);
+                request.setAttribute("br/edu/utfpr/error", errors);
                 request.getRequestDispatcher(address).forward(request, response);
+                return;
             }
 
             //formulario de login
@@ -100,7 +100,7 @@ public class UserController extends HttpServlet {
     private void sendError(HttpServletRequest request, HttpServletResponse response, List<ValidationError> errors) throws ServletException, IOException {
         //reapresenta o formulário com os erros de validação
         String address = "/WEB-INF/view/user/register-user-form.jsp";
-        request.setAttribute("errors", errors);
+        request.setAttribute("br/edu/utfpr/error", errors);
         request.getRequestDispatcher(address).forward(request, response);
     }
 
