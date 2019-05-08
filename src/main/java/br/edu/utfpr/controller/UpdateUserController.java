@@ -32,7 +32,7 @@ public class UpdateUserController extends HttpServlet {
         String id = request.getParameter("id");
 
         //verifica erros de parâmetro
-        List<ValidationError> errors = paramValidation(id);
+        List<ValidationError> errors = userService.paramValidation(id);
         boolean hasError = errors != null;
 
         if (hasError) {
@@ -64,7 +64,7 @@ public class UpdateUserController extends HttpServlet {
         String email = request.getParameter("email");
 
         UserDTO userDTO = new UserDTO(name, email, null, null);
-        List<ValidationError> errors = formValidation(userDTO);
+        List<ValidationError> errors = userService.formValidation(userDTO);
 
         //há erro se o vetor for preenchido
         boolean hasError = errors != null;
@@ -76,7 +76,7 @@ public class UpdateUserController extends HttpServlet {
         }
 
         //id é um parâmetro hidden no formulário de edição
-        errors = paramValidation(request.getParameter("id"));
+        errors = userService.paramValidation(request.getParameter("id"));
         hasError = errors != null;
 
         if (hasError) {
@@ -89,7 +89,8 @@ public class UpdateUserController extends HttpServlet {
         hasError = update(request, response, userDTO);
 
         if (hasError) {
-            //TODO dispara excption para abrir a página de erro
+            errors.add(new ValidationError("", "Opss! Os dados não foram atualizados."));
+            sendError(request, response, errors);
         }
 
         //busca o usuário atualizado
@@ -113,6 +114,7 @@ public class UpdateUserController extends HttpServlet {
         String address = "/WEB-INF/view/user/edit-user-form.jsp";
         request.setAttribute("error", errors);
         request.getRequestDispatcher(address).forward(request, response);
+        return;
     }
 
     private boolean update(HttpServletRequest request, HttpServletResponse response, UserDTO userDTO) throws IOException, ServletException {
@@ -142,45 +144,4 @@ public class UpdateUserController extends HttpServlet {
 
         return (errors.isEmpty() ? null : errors);
     }
-
-    /**
-     * Valida o parâmetro id usado em edições e remoções
-     *
-     * @param id
-     * @return
-     */
-    private List<ValidationError> paramValidation(String id) {
-        List<ValidationError> errors = new ArrayList<>();
-
-        if (id == null || id.isEmpty()) {
-            errors.add(new ValidationError("id", "O identificador do item é obrigatório."));
-        }
-
-        User user = userService.getById(id);
-        if (user == null) {
-            errors.add(new ValidationError("id", "O item não foi encontrado."));
-        }
-        return (errors.isEmpty() ? null : errors);
-    }
-
-    /**
-     * Valida os campos do formulário de dados pessoais.
-     *
-     * @param userDTO
-     * @return
-     */
-    private List<ValidationError> formValidation(UserDTO userDTO) {
-        List<ValidationError> errors = new ArrayList<>();
-
-        if (userDTO.getName() == null || userDTO.getName().isEmpty()) {
-            errors.add(new ValidationError("name", "O campo nome é obrigatório."));
-        }
-
-        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
-            errors.add(new ValidationError("email", "O campo email é obrigatório."));
-        }
-
-        return (errors.isEmpty() ? null : errors);
-    }
-
 }
