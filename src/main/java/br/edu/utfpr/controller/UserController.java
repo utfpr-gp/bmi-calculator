@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.edu.utfpr.dto.UserDTO;
+import br.edu.utfpr.error.ParamException;
 import br.edu.utfpr.model.domain.Role;
 import br.edu.utfpr.model.domain.User;
 import br.edu.utfpr.model.mapper.UserMapper;
+import br.edu.utfpr.service.RoleService;
 import br.edu.utfpr.service.UserService;
 import br.edu.utfpr.util.Constants;
 import br.edu.utfpr.util.Routes;
@@ -28,22 +30,61 @@ import br.edu.utfpr.error.ValidationError;
 public class UserController extends HttpServlet {
 
     UserService userService = new UserService();
+    RoleService roleService = new RoleService();
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String address = "";
         if(request.getServletPath().contains(Routes.CREATE)){
-            String address = "/WEB-INF/view/user/register-user-form.jsp";
+            address = "/WEB-INF/view/user/register-user-form.jsp";
             request.getRequestDispatcher(address).forward(request, response);
         }
         else if(request.getServletPath().contains(Routes.DELETE)){
 
+            String id = request.getParameter("id");
+
+            //verifica erros de parâmetro
+            List<ValidationError> errors = userService.paramValidation(id);
+            boolean hasError = errors != null;
+
+            if (hasError) {
+                throw new ParamException("Parâmetros incorretos!");
+            }
+
+            //remove o usuário
+            boolean isSuccess = userService.deleteById(id);
+            String message = null;
+            if(isSuccess){
+                message = "Usuário removido com sucesso!";
+            }
+            else{
+                message = "Oppss! O usuário não pôde ser removido.";
+            }
+            address = request.getContextPath() + "/a/usuarios/listar";
+            //armazena no escopo de flash
+            request.setAttribute("flash.message", message);
+            //como a ação altera o estado do servidor, faz redirecionamento
+            response.sendRedirect(address);
         }
         else{
+            //listagem
+            List<User> users = userService.findAll();
+            List<UserDTO> usersDTO = new ArrayList<>();
 
+            for(User u : users){
+                Role role = roleService.getById(u.getEmail());
+                //não lista administradores
+                if(role.getRole().equals(Constants.ADMIN)){
+                    continue;
+                }
+                usersDTO.add(UserMapper.toDTO(u));
+            }
+
+            request.setAttribute("users", usersDTO);
+            address = "/WEB-INF/view/user/list-users.jsp";
+            request.getRequestDispatcher(address).forward(request, response);
         }
-
     }
 
     @Override

@@ -8,12 +8,12 @@ import br.edu.utfpr.model.domain.User;
  */
 public class UserMapper {
 
-    public User toEntity(UserDTO dto){
+    public static User toEntity(UserDTO dto){
         User entity = new User(dto.getName(), dto.getEmail(), dto.getPassword());
         return entity;
     }
 
-    public UserDTO toDTO(User entity){
+    public static UserDTO toDTO(User entity){
         UserDTO dto = new UserDTO(entity.getName(), entity.getEmail(), entity.getPassword(), entity.getPassword());
         return dto;
     }

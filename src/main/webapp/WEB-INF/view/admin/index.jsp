@@ -6,5 +6,7 @@
 <t:template title="Administrador">
 	<jsp:body>
 		<h1>Tela do Administrador</h1>
+
+		<a href="a/usuarios/listar">Listar Usuários</a>
 	</jsp:body>
 </t:template>
