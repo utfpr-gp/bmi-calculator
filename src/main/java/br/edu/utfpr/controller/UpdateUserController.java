@@ -59,45 +59,48 @@ public class UpdateUserController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
 
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
+            UserDTO userDTO = new UserDTO(name, email, null, null);
+            List<ValidationError> errors = userService.formValidation(userDTO);
 
-        UserDTO userDTO = new UserDTO(name, email, null, null);
-        List<ValidationError> errors = userService.formValidation(userDTO);
+            //há erro se o vetor for preenchido
+            boolean hasError = errors != null;
 
-        //há erro se o vetor for preenchido
-        boolean hasError = errors != null;
+            if (hasError) {
+                //reapresenta o formulário com os erros de validação
+                sendError(request, response, errors);
+                return;
+            }
 
-        if (hasError) {
-            //reapresenta o formulário com os erros de validação
-            sendError(request, response, errors);
-            return;
+            //id é um parâmetro hidden no formulário de edição
+            errors = userService.paramValidation(request.getParameter("id"));
+            hasError = errors != null;
+
+            if (hasError) {
+                //reapresenta o formulário com os erros de validação
+                sendError(request, response, errors);
+            }
+
+            //atualiza os dados do usuário
+            boolean isSuccess = update(request, response, userDTO);
+
+            if (!isSuccess) {
+                errors = (errors == null)? new ArrayList<>() : errors;
+                errors.add(new ValidationError("", "Opss! Os dados não foram atualizados."));
+                sendError(request, response, errors);
+            }
+
+            //busca o usuário atualizado
+            User user = userService.getById(email);
+
+            String address = request.getContextPath() + "/u/usuarios/editar?id=" + email;
+            response.sendRedirect(address);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        //id é um parâmetro hidden no formulário de edição
-        errors = userService.paramValidation(request.getParameter("id"));
-        hasError = errors != null;
-
-        if (hasError) {
-            //reapresenta o formulário com os erros de validação
-            sendError(request, response, errors);
-            return;
-        }
-
-        //atualiza os dados do usuário
-        hasError = update(request, response, userDTO);
-
-        if (hasError) {
-            errors.add(new ValidationError("", "Opss! Os dados não foram atualizados."));
-            sendError(request, response, errors);
-        }
-
-        //busca o usuário atualizado
-        User user = userService.getById(email);
-
-        String address = request.getContextPath() + "/u/usuarios/editar?id=" + email;
-        response.sendRedirect(address);
     }
 
     /**
@@ -112,7 +115,7 @@ public class UpdateUserController extends HttpServlet {
     private void sendError(HttpServletRequest request, HttpServletResponse response, List<ValidationError> errors) throws ServletException, IOException {
         //reapresenta o formulário com os erros de validação
         String address = "/WEB-INF/view/user/edit-user-form.jsp";
-        request.setAttribute("error", errors);
+        request.setAttribute("errors", errors);
         request.getRequestDispatcher(address).forward(request, response);
         return;
     }

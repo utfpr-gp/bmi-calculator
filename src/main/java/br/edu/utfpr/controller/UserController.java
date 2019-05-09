@@ -53,7 +53,7 @@ public class UserController extends HttpServlet {
             }
 
             //remove o usuário
-            boolean isSuccess = userService.deleteById(id);
+            boolean isSuccess = userService.deleteUserAndRole(id);
             String message = null;
             if(isSuccess){
                 message = "Usuário removido com sucesso!";
@@ -118,7 +118,7 @@ public class UserController extends HttpServlet {
                 errors = new ArrayList<>();
                 errors.add(new ValidationError("", "Erro ao persistir os dados."));
 
-                request.setAttribute("br/edu/utfpr/error", errors);
+                request.setAttribute("errors", errors);
                 request.getRequestDispatcher(address).forward(request, response);
                 return;
             }
@@ -141,7 +141,7 @@ public class UserController extends HttpServlet {
     private void sendError(HttpServletRequest request, HttpServletResponse response, List<ValidationError> errors) throws ServletException, IOException {
         //reapresenta o formulário com os erros de validação
         String address = "/WEB-INF/view/user/register-user-form.jsp";
-        request.setAttribute("br/edu/utfpr/error", errors);
+        request.setAttribute("errors", errors);
         request.getRequestDispatcher(address).forward(request, response);
     }
 

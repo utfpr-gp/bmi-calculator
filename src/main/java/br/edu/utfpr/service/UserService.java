@@ -39,6 +39,28 @@ public class UserService extends AbstractService<String, User> {
         return isSuccess;
     }
 
+    public boolean deleteUserAndRole(String id){
+        RoleDAO roleDAO= new RoleDAO();
+
+        boolean isSuccess = true;
+        try {
+            User user = dao.getById(id);
+            Role role = roleDAO.getById(id);
+
+            JPAUtil.beginTransaction();
+            dao.delete(user);
+            roleDAO.delete(role);
+            JPAUtil.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            isSuccess = false;
+            JPAUtil.rollBack();
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
+        return isSuccess;
+    }
+
     /**
      * Valida o parâmetro id usado em edições e remoções
      *
